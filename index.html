@@ -16,18 +16,19 @@
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             transition: background-color 0.3s ease;
-            background-image: url('Minecraft_panorama.png'); /* Tło wczytane z GitHub */
-            background-size: cover;  /* Dopasowanie rozmiaru tła */
-            background-position: center center; /* Wyśrodkowanie obrazu tła */
-            background-repeat: no-repeat; /* Brak powtarzania tła */
         }
 
+        /* Tylko górna część strony z tłem */
         .header {
             text-align: center;
             margin-bottom: 20px;
             animation: fadeIn 1s ease;
-            z-index: 2;
-            position: relative;
+            width: 100%;
+            background-image: url('Minecraft_panorama.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            height: 250px;
         }
 
         .header img {
@@ -42,6 +43,7 @@
             color: #4CAF50;
         }
 
+        /* Przycisk zmiany motywu */
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -62,11 +64,12 @@
             color: #121212;
         }
 
-        form, .panel {
+        /* Formularz logowania oraz panel */
+        form, .panel, #bulwowo-update {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background-color: rgba(0, 0, 0, 0.7); /* Lekka przezroczystość dla formularza */
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -99,6 +102,11 @@
             text-align: center;
         }
 
+        .bulwowo-update {
+            display: none;
+        }
+
+        /* Animacja */
         @keyframes fadeIn {
             from {opacity: 0;}
             to {opacity: 1;}
@@ -127,10 +135,32 @@
     <button id="login-btn" type="submit">Zaloguj się</button>
 </form>
 
+<!-- Panel użytkownika -->
 <div class="panel" id="user-panel">
     <h2>Witaj, <span id="user-name"></span>!</h2>
     <p>To jest Twój panel użytkownika.</p>
+    <button onclick="goToBulwowoUpdate()">Przejdź do Bulwowo Update</button>
     <button onclick="logout()">Wyloguj się</button>
+</div>
+
+<!-- Sekcja Bulwowo Update -->
+<div id="bulwowo-update" class="bulwowo-update">
+    <h2>Bulwowo Update</h2>
+    <p>Przeglądaj i dodawaj posty (Tylko dla Bartolgame)</p>
+    
+    <!-- Formularz do tworzenia postu (widoczny tylko dla Bartolgame) -->
+    <div id="create-post-section" style="display:none;">
+        <input id="post-title" type="text" placeholder="Tytuł postu" required />
+        <textarea id="post-content" placeholder="Treść postu" required></textarea>
+        <input type="file" id="post-image" accept="image/*">
+        <button onclick="createPost()">Dodaj post</button>
+    </div>
+    
+    <div id="posts-list">
+        <!-- Posty będą tu wyświetlane -->
+    </div>
+
+    <button onclick="goBackToPanel()">Cofnij do panelu</button>
 </div>
 
 <script>
@@ -182,6 +212,46 @@
     function logout() {
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
+        document.getElementById('bulwowo-update').style.display = 'none';
+    }
+
+    function goToBulwowoUpdate() {
+        const username = document.getElementById('user-name').textContent;
+        if (username === 'bartolgame') {
+            document.getElementById('create-post-section').style.display = 'block';
+        }
+        document.getElementById('user-panel').style.display = 'none';
+        document.getElementById('bulwowo-update').style.display = 'flex';
+    }
+
+    function goBackToPanel() {
+        document.getElementById('bulwowo-update').style.display = 'none';
+        document.getElementById('user-panel').style.display = 'flex';
+    }
+
+    function createPost() {
+        const title = document.getElementById('post-title').value;
+        const content = document.getElementById('post-content').value;
+        const image = document.getElementById('post-image').files[0];
+
+        const postDiv = document.createElement('div');
+        const postTitle = document.createElement('h3');
+        postTitle.textContent = title;
+        const postContent = document.createElement('p');
+        postContent.textContent = content;
+
+        postDiv.appendChild(postTitle);
+        postDiv.appendChild(postContent);
+
+        if (image) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(image);
+            img.alt = title;
+            img.style.width = '100%';
+            postDiv.appendChild(img);
+        }
+
+        document.getElementById('posts-list').appendChild(postDiv);
     }
 </script>
 
