@@ -19,7 +19,6 @@
             overflow-x: hidden;
         }
 
-        /* Tło obrazu - przy samej górze */
         .header {
             position: relative;
             text-align: center;
@@ -32,19 +31,15 @@
             margin-bottom: 20px;
         }
 
-        .header img {
-            width: 180px;
-            height: auto;
-            margin-bottom: 10px;
+        /* Logo Bulwowo */
+        .header-logo {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 150px;
         }
 
-        .header h1 {
-            margin: 0;
-            font-size: 3em;
-            color: #4CAF50;
-        }
-
-        /* Przyciski u góry */
         .top-buttons {
             position: absolute;
             top: 10px;
@@ -73,7 +68,10 @@
             background-color: #45a049;
         }
 
-        /* Formularz logowania */
+        .logout-button {
+            display: none;
+        }
+
         form, .panel {
             display: flex;
             flex-direction: column;
@@ -104,27 +102,6 @@
             background-color: #45a049;
         }
 
-        .panel {
-            display: none;
-            text-align: center;
-        }
-
-        .bulwowo-update-button {
-            background-color: #ff5722;
-            color: #fff;
-            font-size: 1.5em;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .bulwowo-update-button:hover {
-            background-color: #e64a19;
-        }
-
         @keyframes slideIn {
             from {transform: translateY(20px); opacity: 0;}
             to {transform: translateY(0); opacity: 1;}
@@ -133,30 +110,24 @@
 </head>
 <body>
 
-<!-- Główne tło i nagłówek -->
 <div class="header">
-    <img src="./path_to_your_image.png" alt="Logo">
-    <h1>Bulwowo</h1>
+    <img src="Bulwowo_Logo.png" alt="Logo" class="header-logo">
 </div>
 
-<!-- Przyciski na górze -->
 <div class="top-buttons">
     <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     <button class="logout-button" onclick="logout()">Wyloguj się</button>
 </div>
 
-<!-- Formularz logowania -->
 <form id="login-form" onsubmit="login(event)">
     <input id="username" type="text" placeholder="Nazwa użytkownika" required />
     <input id="password" type="password" placeholder="Hasło" required />
     <button id="login-btn" type="submit">Zaloguj się</button>
 </form>
 
-<!-- Panel użytkownika -->
 <div class="panel" id="user-panel">
     <h2>Witaj, <span id="user-name"></span>!</h2>
     <button class="bulwowo-update-button" onclick="window.location.href='bulwowo_update.html'">Bulwowo Update</button>
-    <button onclick="logout()">Wyloguj się</button>
 </div>
 
 <script>
@@ -175,22 +146,6 @@
         "salvat": "salvat555"
     };
 
-    function toggleTheme() {
-        const btn = document.querySelector('.theme-toggle');
-        document.body.classList.toggle('light-theme');
-        if (document.body.classList.contains('light-theme')) {
-            document.body.style.backgroundColor = '#f7f7f7';
-            document.body.style.color = '#333';
-            btn.classList.add('light');
-            btn.textContent = '☀️';
-        } else {
-            document.body.style.backgroundColor = '#121212';
-            document.body.style.color = '#e0e0e0';
-            btn.classList.remove('light');
-            btn.textContent = '🌙';
-        }
-    }
-
     function login(event) {
         event.preventDefault();
         const username = document.getElementById('username').value;
@@ -200,6 +155,7 @@
             document.getElementById('user-name').textContent = username;
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('user-panel').style.display = 'flex';
+            document.querySelector('.logout-button').style.display = 'block';
         } else {
             alert('Niepoprawne dane logowania');
         }
@@ -208,6 +164,7 @@
     function logout() {
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
+        document.querySelector('.logout-button').style.display = 'none';
     }
 </script>
 
