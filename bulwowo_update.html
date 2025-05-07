@@ -3,178 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulwowo Update</title>
+    <title>Bulwowo - Ogłoszenia</title>
     <style>
         body {
-            background-color: #121212;
-            color: #e0e0e0;
             font-family: Arial, sans-serif;
-            padding: 20px;
+            background-color: #f6f6f6;
             margin: 0;
+            padding: 0;
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header-logo {
-            height: 100px;
-        }
-
-        form, .post-container {
-            background-color: #1e1e1e;
+            background-color: #FF9F00;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
-            width: 80%;
-            max-width: 600px;
-            margin: 0 auto;
+            text-align: center;
+            color: white;
         }
 
-        input, textarea, button {
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            font-size: 1.1em;
-            width: 100%;
-            margin-bottom: 15px;
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
         }
 
-        button {
-            background-color: #4CAF50;
+        .category-filter {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .category-filter button {
+            padding: 10px;
+            border: none;
+            background-color: #FF9F00;
+            color: white;
             cursor: pointer;
         }
 
-        button:hover {
+        .category-filter button:hover {
+            background-color: #FF7F00;
+        }
+
+        .add-ad-button {
+            margin: 20px auto;
+            display: block;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .add-ad-button:hover {
             background-color: #45a049;
         }
 
-        .post {
-            background-color: #333;
+        .ad-form, .ad-container {
+            background-color: #fff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .ad-item {
+            background-color: #fafafa;
             padding: 15px;
+            margin: 10px 0;
             border-radius: 5px;
-            margin-top: 10px;
-            position: relative;
+            border: 1px solid #ddd;
         }
 
-        .post p {
+        .ad-item h3 {
             margin: 0;
-            color: #fff;
+            font-size: 1.5em;
         }
 
-        .post h3 {
-            margin: 0;
-            color: #4CAF50;
+        .ad-item p {
+            margin: 10px 0;
+            color: #333;
         }
 
-        .delete-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #ff4c4c;
-            border: none;
-            color: white;
+        .ad-item img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .ad-item .ad-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .ad-item button {
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
+            background-color: #FF9F00;
+            color: white;
+            border: none;
+        }
+
+        .ad-item button:hover {
+            background-color: #FF7F00;
         }
 
         .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            cursor: pointer;
             padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
             border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
 
-<button class="back-button" onclick="window.location.href='index.html'">← Cofnij</button>
-
 <div class="header">
-    <img src="Bulwowo_Logo.png" alt="Logo" class="header-logo">
-    <h1>Bulwowo Update</h1>
+    <h1>Bulwowo Ogłoszenia</h1>
 </div>
 
-<form id="post-form" onsubmit="createPost(event)" style="display: none;">
-    <input id="post-title" placeholder="Tytuł posta" required>
-    <textarea id="post-content" placeholder="Napisz tutaj swój post..." rows="5" required></textarea>
-    <button type="submit">Dodaj post</button>
-</form>
-
-<div class="post-container" id="posts-container">
+<div class="category-filter">
+    <button onclick="filterAds('Motoryzacja')">Motoryzacja</button>
+    <button onclick="filterAds('Nieruchomości')">Nieruchomości</button>
+    <button onclick="filterAds('Elektronika')">Elektronika</button>
+    <button onclick="filterAds('Praca')">Praca</button>
 </div>
+
+<button class="add-ad-button" onclick="toggleAdForm()">Dodaj ogłoszenie</button>
+
+<div class="ad-form" id="ad-form" style="display: none;">
+    <h2>Dodaj Ogłoszenie</h2>
+    <select id="category">
+        <option value="Motoryzacja">Motoryzacja</option>
+        <option value="Nieruchomości">Nieruchomości</option>
+        <option value="Elektronika">Elektronika</option>
+        <option value="Praca">Praca</option>
+    </select>
+    <input type="text" id="ad-title" placeholder="Tytuł ogłoszenia" required>
+    <textarea id="ad-description" placeholder="Opis ogłoszenia" rows="5" required></textarea>
+    <input type="file" id="ad-image" accept="image/*">
+    <button onclick="submitAd()">Dodaj Ogłoszenie</button>
+</div>
+
+<div class="ad-container" id="ad-container"></div>
 
 <script>
     const currentUser = localStorage.getItem('loggedUser');
+    const ads = JSON.parse(localStorage.getItem('ads')) || [];
 
-    if (currentUser === 'bartolgame') {
-        document.getElementById('post-form').style.display = 'block';
+    function toggleAdForm() {
+        const form = document.getElementById('ad-form');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
     }
 
-    function savePosts(posts) {
-        localStorage.setItem('bulwowo_posts', JSON.stringify(posts));
-    }
+    function submitAd() {
+        const title = document.getElementById('ad-title').value;
+        const description = document.getElementById('ad-description').value;
+        const category = document.getElementById('category').value;
+        const image = document.getElementById('ad-image').files[0];
 
-    function loadPosts() {
-        const storedPosts = localStorage.getItem('bulwowo_posts');
-        return storedPosts ? JSON.parse(storedPosts) : [];
-    }
+        if (title && description) {
+            const ad = {
+                id: Date.now(),
+                title: title,
+                description: description,
+                category: category,
+                image: image ? URL.createObjectURL(image) : null,
+                user: currentUser
+            };
 
-    const posts = loadPosts();
-    displayPosts();
-
-    function createPost(event) {
-        event.preventDefault();
-
-        const postTitle = document.getElementById('post-title').value;
-        const postContent = document.getElementById('post-content').value;
-
-        if (postTitle.trim() !== "" && postContent.trim() !== "") {
-            posts.push({ title: postTitle, content: postContent, author: currentUser });
-            savePosts(posts);
-            displayPosts();
-            document.getElementById('post-title').value = "";
-            document.getElementById('post-content').value = "";
-        } else {
-            alert('Post i tytuł nie mogą być puste!');
+            ads.push(ad);
+            localStorage.setItem('ads', JSON.stringify(ads));
+            displayAds();
+            toggleAdForm();
         }
     }
 
-    function displayPosts() {
-        const postsContainer = document.getElementById('posts-container');
-        postsContainer.innerHTML = "";
+    function filterAds(category) {
+        const filteredAds = ads.filter(ad => ad.category === category);
+        displayAds(filteredAds);
+    }
 
-        posts.forEach((post, index) => {
-            const postElement = document.createElement('div');
-            postElement.classList.add('post');
-            postElement.innerHTML = `<h3>${post.author}: ${post.title}</h3><p>${post.content}</p>`;
-
-            if (currentUser === 'bartolgame') {
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Usuń';
-                deleteButton.classList.add('delete-button');
-                deleteButton.onclick = () => {
-                    if (confirm('Czy na pewno chcesz usunąć ten post?')) {
-                        posts.splice(index, 1);
-                        savePosts(posts);
-                        displayPosts();
-                    }
-                };
-                postElement.appendChild(deleteButton);
-            }
-            postsContainer.appendChild(postElement);
+    function displayAds(filteredAds = ads) {
+        const container = document.getElementById('ad-container');
+        container.innerHTML = '';
+        
+        filteredAds.forEach(ad => {
+            const adElement = document.createElement('div');
+            adElement.classList.add('ad-item');
+            adElement.innerHTML = `
+                <h3>${ad.title}</h3>
+                <p>${ad.description}</p>
+                ${ad.image ? `<img src="${ad.image}" alt="Zdjęcie ogłoszenia">` : ''}
+                <div class="ad-buttons">
+                    ${ad.user === currentUser ? `<button onclick="editAd(${ad.id})">Edytuj</button><button onclick="deleteAd(${ad.id})">Usuń</button>` : ''}
+                </div>
+            `;
+            container.appendChild(adElement);
         });
     }
+
+    function editAd(id) {
+        const ad = ads.find(ad => ad.id === id);
+        if (ad.user === currentUser) {
+            document.getElementById('ad-title').value = ad.title;
+            document.getElementById('ad-description').value = ad.description;
+            document.getElementById('category').value = ad.category;
+            toggleAdForm();
+            deleteAd(id); // Remove ad before updating
+        }
+    }
+
+    function deleteAd(id) {
+        const adIndex = ads.findIndex(ad => ad.id === id);
+        if (adIndex !== -1) {
+            ads.splice(adIndex, 1);
+            localStorage.setItem('ads', JSON.stringify(ads));
+            displayAds();
+        }
+    }
+
+    // Display ads initially
+    displayAds();
 </script>
 
 </body>
