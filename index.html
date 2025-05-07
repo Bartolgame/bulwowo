@@ -31,7 +31,6 @@
             margin-bottom: 20px;
         }
 
-        /* Logo Bulwowo */
         .header-logo {
             position: absolute;
             top: 20px;
@@ -72,7 +71,7 @@
             display: none;
         }
 
-        form, .panel {
+        form {
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -126,8 +125,8 @@
     <button id="login-btn" type="submit">Zaloguj się</button>
 </form>
 
-<div class="panel" id="user-panel">
-    <h2>Witaj, <span id="user-name"></span>!</h2>
+<div class="panel" id="user-panel" style="display: none;">
+    <h2 id="welcome-text"></h2>
     <button class="bulwowo-update-button" id="bulwowo-update-btn" onclick="window.location.href='bulwowo_update.html'">Bulwowo Update</button>
 </div>
 
@@ -147,19 +146,16 @@
         "salvat": "salvat555"
     };
 
-    document.getElementById('bulwowo-update-btn').style.display = 'none';
-
     function login(event) {
         event.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
         if (users[username] === password) {
-            document.getElementById('user-name').textContent = username;
+            document.getElementById('welcome-text').textContent = `Witaj, ${username}!`;
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('user-panel').style.display = 'flex';
             document.querySelector('.logout-button').style.display = 'block';
-            document.getElementById('bulwowo-update-btn').style.display = 'block';
         } else {
             alert('Niepoprawne dane logowania');
         }
@@ -169,7 +165,6 @@
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
         document.querySelector('.logout-button').style.display = 'none';
-        document.getElementById('bulwowo-update-btn').style.display = 'none';
     }
 </script>
 
