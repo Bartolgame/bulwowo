@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulwowo Update</title>
+    <style>
+        /* Twoje style dla Bulwowo Update... */
+    </style>
+</head>
+<body>
+
+<h1>Bulwowo Update</h1>
+
+<!-- Formularz do tworzenia postów -->
+<div id="create-post-form" style="display: none;">
+    <form onsubmit="submitPost(event)">
+        <label for="title">Tytuł posta</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="content">Treść posta</label>
+        <textarea id="content" name="content" required></textarea>
+
+        <label for="image">Obrazek</label>
+        <input type="file" id="image" name="image">
+
+        <button type="submit">Dodaj Post</button>
+    </form>
+</div>
+
+<!-- Przycisk tworzenia posta (dostępny tylko dla bartolgame) -->
+<script>
+    window.onload = function() {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (loggedInUser === "bartolgame") {
+            document.getElementById('create-post-form').style.display = 'block';
+        }
+    }
+
+    function submitPost(event) {
+        event.preventDefault();
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        const image = document.getElementById('image').files[0];
+
+        // Pobierz zapisane posty z localStorage
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+        // Zapisz nowy post
+        const newPost = {
+            title: title,
+            content: content,
+            image: image ? URL.createObjectURL(image) : null
+        };
+        posts.push(newPost);
+        localStorage.setItem('posts', JSON.stringify(posts));
+
+        // Przekierowanie do strony z postami
+        window.location.reload();
+    }
+</script>
+
+<!-- Wyświetlanie postów -->
+<h2>Posty:</h2>
+<div id="posts">
+    <script>
+        const posts = JSON.parse(localStorage.getItem('posts')) || [];
+        posts.forEach(post => {
+            const postDiv = document.createElement('div');
+            postDiv.classList.add('post');
+            postDiv.innerHTML = `
+                <h3>${post.title}</h3>
+                <p>${post.content}</p>
+                ${post.image ? `<img src="${post.image}" alt="Post image" width="200">` : ''}
+            `;
+            document.getElementById('posts').appendChild(postDiv);
+        });
+    </script>
+</div>
+
+<!-- Przycisk powrotu do panelu -->
+<a href="index.html">Cofnij do panelu</a>
+
+</body>
+</html>
