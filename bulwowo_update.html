@@ -6,173 +6,100 @@
     <title>Bulwowo Update</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
+            font-family: Arial, sans-serif;
             background-color: #121212;
             color: #e0e0e0;
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
         }
-
         .header {
             text-align: center;
             margin-bottom: 20px;
-            animation: fadeIn 1s ease;
-            width: 100%;
-            background-image: url('Minecraft_panorama.png');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            height: 250px;
         }
-
-        .header img {
-            width: 180px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 3em;
-            color: #4CAF50;
-        }
-
-        /* Formularz dodawania posta */
-        .post-form, .posts-container {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            font-size: 1.2em;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        input, textarea, button {
+        .post-container {
+            background-color: #1e1e1e;
+            margin: 10px 0;
             padding: 15px;
+            border-radius: 8px;
+        }
+        .add-post {
+            display: none;
+            margin-bottom: 20px;
+        }
+        textarea, input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
             border-radius: 5px;
-            border: 1px solid #444;
             background-color: #2e2e2e;
             color: #e0e0e0;
-            font-size: 1.1em;
+            border: none;
         }
-
         button {
+            padding: 10px;
             background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
-
         button:hover {
             background-color: #45a049;
         }
-
-        .posts-container {
-            width: 80%;
-            max-width: 800px;
-            margin: 20px 0;
-        }
-
-        .post {
-            background-color: #2e2e2e;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
-        }
-
-        /* Animacja */
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
+        .back-button {
+            margin-top: 10px;
+            background-color: #ff5722;
         }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <img src="./path_to_your_image.png" alt="Logo">
     <h1>Bulwowo Update</h1>
 </div>
 
-<button onclick="goBackToPanel()">Cofnij do panelu</button>
-
-<!-- Formularz dodawania posta - tylko dla użytkownika "bartolgame" -->
-<div class="post-form" id="post-form">
-    <input type="text" id="post-title" placeholder="Tytuł posta" required />
-    <textarea id="post-content" placeholder="Treść posta..." rows="5" required></textarea>
-    <input type="file" id="post-image" accept="image/*" />
-    <button onclick="addPost()">Dodaj Post</button>
+<div class="add-post" id="add-post">
+    <input type="text" id="post-title" placeholder="Tytuł posta" required>
+    <textarea id="post-content" placeholder="Treść posta" required></textarea>
+    <button onclick="savePost()">Dodaj post</button>
 </div>
 
-<!-- Lista postów -->
-<div class="posts-container" id="posts-container">
-    <!-- Posty będą tutaj wyświetlane -->
-</div>
+<div id="posts"></div>
+
+<button class="back-button" onclick="goBack()">Cofnij</button>
 
 <script>
-    // Przykładowe posty
-    let posts = [];
+    const username = localStorage.getItem('username');
 
-    // Tylko użytkownik "bartolgame" może dodawać posty
-    const currentUser = "bartolgame"; // Załóżmy, że zalogowany użytkownik to "bartolgame"
+    function goBack() {
+        window.location.href = 'index.html';
+    }
 
-    // Funkcja dodawania posta
-    function addPost() {
-        const title = document.getElementById("post-title").value;
-        const content = document.getElementById("post-content").value;
-        const image = document.getElementById("post-image").files[0];
+    function loadPosts() {
+        fetch('bulwowo_update_data.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('posts').innerHTML = data;
+            });
+    }
 
-        if (title && content) {
-            const post = {
-                title: title,
-                content: content,
-                image: image ? URL.createObjectURL(image) : null
-            };
+    function savePost() {
+        const title = document.getElementById('post-title').value;
+        const content = document.getElementById('post-content').value;
+        const newPost = `<div class='post-container'><h3>${title}</h3><p>${content}</p></div>`;
+        fetch('bulwowo_update_data.html', {
+            method: 'POST',
+            headers: {'Content-Type': 'text/html'},
+            body: newPost
+        }).then(() => loadPosts());
+    }
 
-            posts.push(post);
-            displayPosts();
-        } else {
-            alert("Proszę wypełnić wszystkie pola.");
+    document.addEventListener('DOMContentLoaded', () => {
+        if (username === 'bartolgame') {
+            document.getElementById('add-post').style.display = 'block';
         }
-    }
-
-    // Funkcja wyświetlania postów
-    function displayPosts() {
-        const postsContainer = document.getElementById("posts-container");
-        postsContainer.innerHTML = "";
-
-        posts.forEach((post, index) => {
-            const postElement = document.createElement("div");
-            postElement.classList.add("post");
-
-            postElement.innerHTML = `
-                <h3>${post.title}</h3>
-                <p>${post.content}</p>
-                ${post.image ? `<img src="${post.image}" alt="Post Image" style="max-width: 100%; border-radius: 5px;" />` : ""}
-                <button onclick="deletePost(${index})">Usuń Post</button>
-            `;
-            postsContainer.appendChild(postElement);
-        });
-    }
-
-    // Funkcja usuwania posta
-    function deletePost(index) {
-        if (confirm("Czy na pewno chcesz usunąć ten post?")) {
-            posts.splice(index, 1);
-            displayPosts();
-        }
-    }
-
-    // Funkcja powrotu do panelu
-    function goBackToPanel() {
-        window.location.href = "index.html"; // Powróć do strony głównej
-    }
+        loadPosts();
+    });
 </script>
 
 </body>
