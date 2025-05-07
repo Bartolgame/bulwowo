@@ -3,83 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulwowo Update</title>
+    <title>Bulwowo - Bulwowo Update</title>
     <style>
-        /* Twoje style dla Bulwowo Update... */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        .header img {
+            width: 180px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            color: #4CAF50;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5em;
+            width: 50px;
+            height: 50px;
+        }
+
+        .theme-toggle.light {
+            background-color: #ffffff;
+            color: #121212;
+        }
+
+        .panel, .update-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease;
+            font-size: 1.2em;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        input, button, textarea {
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #2e2e2e;
+            color: #e0e0e0;
+            font-size: 1.1em;
+            width: 100%;
+        }
+
+        button {
+            background-color: #4CAF50;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .update-panel {
+            display: none;
+        }
+
+        .post {
+            background-color: #2e2e2e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .post h3 {
+            margin-top: 0;
+        }
+
+        .post .content {
+            margin-top: 10px;
+        }
+
+        .post .image-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes slideIn {
+            from {transform: translateY(20px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
     </style>
 </head>
 <body>
 
-<h1>Bulwowo Update</h1>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-<!-- Formularz do tworzenia postów -->
-<div id="create-post-form" style="display: none;">
-    <form onsubmit="submitPost(event)">
-        <label for="title">Tytuł posta</label>
-        <input type="text" id="title" name="title" required>
-
-        <label for="content">Treść posta</label>
-        <textarea id="content" name="content" required></textarea>
-
-        <label for="image">Obrazek</label>
-        <input type="file" id="image" name="image">
-
-        <button type="submit">Dodaj Post</button>
-    </form>
+<div class="header">
+    <img src="./path_to_your_image.png" alt="Logo">
+    <h1>Bulwowo Update</h1>
 </div>
 
-<!-- Przycisk tworzenia posta (dostępny tylko dla bartolgame) -->
+<div class="panel" id="user-panel">
+    <h2>Witaj, <span id="user-name"></span>!</h2>
+    <p>To jest Twój panel użytkownika.</p>
+    <button onclick="logout()">Wyloguj się</button>
+</div>
+
+<div class="update-panel" id="update-panel">
+    <h2>Dodaj nowy post</h2>
+    <input id="post-title" type="text" placeholder="Tytuł posta" required />
+    <textarea id="post-content" placeholder="Treść posta" required></textarea>
+    <input type="file" id="file-upload" />
+    <button onclick="addPost()">Dodaj post</button>
+    <button onclick="goBack()">Cofnij do panelu</button>
+
+    <div id="posts-container"></div>
+</div>
+
 <script>
-    window.onload = function() {
-        const loggedInUser = localStorage.getItem('loggedInUser');
-        if (loggedInUser === "bartolgame") {
-            document.getElementById('create-post-form').style.display = 'block';
+    const users = {
+        "bartolgame": "p@ss1234",
+        "matizke": "m@tiz2023",
+        "adrian": "adrian789",
+        "thecejoto": "cejoto_456",
+        "dzwonko": "dzwonko999",
+        "grigor": "grigor_321",
+        "koteks": "koteks777",
+        "pigeon": "pigeon111",
+        "yatkinss": "yatkinss000",
+        "wojtec": "wojtec333",
+        "arbuzek": "arbuzek888",
+        "salvat": "salvat555"
+    };
+
+    function toggleTheme() {
+        const btn = document.querySelector('.theme-toggle');
+        document.body.classList.toggle('light-theme');
+        if (document.body.classList.contains('light-theme')) {
+            document.body.style.backgroundColor = '#f7f7f7';
+            document.body.style.color = '#333';
+            btn.classList.add('light');
+            btn.textContent = '☀️';
+        } else {
+            document.body.style.backgroundColor = '#121212';
+            document.body.style.color = '#e0e0e0';
+            btn.classList.remove('light');
+            btn.textContent = '🌙';
         }
     }
 
-    function submitPost(event) {
+    function login(event) {
         event.preventDefault();
-        const title = document.getElementById('title').value;
-        const content = document.getElementById('content').value;
-        const image = document.getElementById('image').files[0];
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-        // Pobierz zapisane posty z localStorage
-        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        if (users[username] === password) {
+            document.getElementById('user-name').textContent = username;
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('user-panel').style.display = 'flex';
 
-        // Zapisz nowy post
-        const newPost = {
-            title: title,
-            content: content,
-            image: image ? URL.createObjectURL(image) : null
-        };
-        posts.push(newPost);
-        localStorage.setItem('posts', JSON.stringify(posts));
-
-        // Przekierowanie do strony z postami
-        window.location.reload();
+            if (username === "bartolgame") {
+                document.getElementById('update-panel').style.display = 'block';
+            }
+        } else {
+            alert('Niepoprawne dane logowania');
+        }
     }
-</script>
 
-<!-- Wyświetlanie postów -->
-<h2>Posty:</h2>
-<div id="posts">
-    <script>
+    function logout() {
+        document.getElementById('login-form').style.display = 'flex';
+        document.getElementById('user-panel').style.display = 'none';
+        document.getElementById('update-panel').style.display = 'none';
+    }
+
+    function goBack() {
+        document.getElementById('update-panel').style.display = 'none';
+        document.getElementById('user-panel').style.display = 'flex';
+    }
+
+    function addPost() {
+        const title = document.getElementById('post-title').value;
+        const content = document.getElementById('post-content').value;
         const posts = JSON.parse(localStorage.getItem('posts')) || [];
-        posts.forEach(post => {
-            const postDiv = document.createElement('div');
-            postDiv.classList.add('post');
-            postDiv.innerHTML = `
-                <h3>${post.title}</h3>
-                <p>${post.content}</p>
-                ${post.image ? `<img src="${post.image}" alt="Post image" width="200">` : ''}
-            `;
-            document.getElementById('posts').appendChild(postDiv);
-        });
-    </script>
-</div>
+        posts.push({ title, content });
+        localStorage.setItem('posts', JSON.stringify(posts));
+        loadPosts();
+    }
 
-<!-- Przycisk powrotu do panelu -->
-<a href="index.html">Cofnij do panelu</a>
+    function loadPosts() {
+        const posts = JSON.parse(localStorage.getItem('posts')) || [];
+        const postsContainer = document.getElementById('posts-container');
+        postsContainer.innerHTML = ''; // Clear current posts
+        posts.forEach(post => {
+            const postElement = document.createElement('div');
+            postElement.classList.add('post');
+            postElement.innerHTML = `
+                <h3>${post.title}</h3>
+                <div class="content">${post.content}</div>
+            `;
+            postsContainer.appendChild(postElement);
+        });
+    }
+
+    window.onload = function () {
+        loadPosts();
+    };
+</script>
 
 </body>
 </html>
