@@ -95,7 +95,7 @@
 <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
 <div class="header">
-    <img src="./path_to_your_image.png" alt="Logo">
+    <img src="path_to_your_image.png" alt="Logo">
     <h1>Bulwowo</h1>
 </div>
 
@@ -110,6 +110,7 @@
 <div class="panel" id="user-panel">
     <h2>Witaj, <span id="user-name"></span>!</h2>
     <p>To jest Twój panel użytkownika.</p>
+    <a href="bulwowo_update.html" id="update-link">Przejdź do Bulwowo Update</a>
     <button onclick="logout()">Wyloguj się</button>
 </div>
 
@@ -151,6 +152,7 @@
         const password = document.getElementById('password').value;
 
         if (users[username] === password) {
+            localStorage.setItem('loggedInUser', username);
             document.getElementById('user-name').textContent = username;
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('user-panel').style.display = 'flex';
@@ -160,8 +162,18 @@
     }
 
     function logout() {
+        localStorage.removeItem('loggedInUser');
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
+    }
+
+    window.onload = function() {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (loggedInUser) {
+            document.getElementById('user-name').textContent = loggedInUser;
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('user-panel').style.display = 'flex';
+        }
     }
 </script>
 
