@@ -64,8 +64,8 @@
             color: #121212;
         }
 
-        /* Formularz logowania oraz panel */
-        form, .panel, #bulwowo-update {
+        /* Formularz logowania */
+        form {
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -75,8 +75,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             animation: slideIn 0.5s ease;
             font-size: 1.2em;
-            z-index: 2;
-            position: relative;
         }
 
         input, button {
@@ -97,15 +95,6 @@
             background-color: #45a049;
         }
 
-        .panel {
-            display: none;
-            text-align: center;
-        }
-
-        .bulwowo-update {
-            display: none;
-        }
-
         /* Animacja */
         @keyframes fadeIn {
             from {opacity: 0;}
@@ -115,6 +104,12 @@
         @keyframes slideIn {
             from {transform: translateY(20px); opacity: 0;}
             to {transform: translateY(0); opacity: 1;}
+        }
+
+        /* Ukrywanie panelu i elementów po logowaniu */
+        .panel {
+            display: none;
+            text-align: center;
         }
     </style>
 </head>
@@ -141,26 +136,6 @@
     <p>To jest Twój panel użytkownika.</p>
     <button onclick="goToBulwowoUpdate()">Przejdź do Bulwowo Update</button>
     <button onclick="logout()">Wyloguj się</button>
-</div>
-
-<!-- Sekcja Bulwowo Update -->
-<div id="bulwowo-update" class="bulwowo-update">
-    <h2>Bulwowo Update</h2>
-    <p>Przeglądaj i dodawaj posty (Tylko dla Bartolgame)</p>
-    
-    <!-- Formularz do tworzenia postu (widoczny tylko dla Bartolgame) -->
-    <div id="create-post-section" style="display:none;">
-        <input id="post-title" type="text" placeholder="Tytuł postu" required />
-        <textarea id="post-content" placeholder="Treść postu" required></textarea>
-        <input type="file" id="post-image" accept="image/*">
-        <button onclick="createPost()">Dodaj post</button>
-    </div>
-    
-    <div id="posts-list">
-        <!-- Posty będą tu wyświetlane -->
-    </div>
-
-    <button onclick="goBackToPanel()">Cofnij do panelu</button>
 </div>
 
 <script>
@@ -212,46 +187,10 @@
     function logout() {
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
-        document.getElementById('bulwowo-update').style.display = 'none';
     }
 
     function goToBulwowoUpdate() {
-        const username = document.getElementById('user-name').textContent;
-        if (username === 'bartolgame') {
-            document.getElementById('create-post-section').style.display = 'block';
-        }
-        document.getElementById('user-panel').style.display = 'none';
-        document.getElementById('bulwowo-update').style.display = 'flex';
-    }
-
-    function goBackToPanel() {
-        document.getElementById('bulwowo-update').style.display = 'none';
-        document.getElementById('user-panel').style.display = 'flex';
-    }
-
-    function createPost() {
-        const title = document.getElementById('post-title').value;
-        const content = document.getElementById('post-content').value;
-        const image = document.getElementById('post-image').files[0];
-
-        const postDiv = document.createElement('div');
-        const postTitle = document.createElement('h3');
-        postTitle.textContent = title;
-        const postContent = document.createElement('p');
-        postContent.textContent = content;
-
-        postDiv.appendChild(postTitle);
-        postDiv.appendChild(postContent);
-
-        if (image) {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(image);
-            img.alt = title;
-            img.style.width = '100%';
-            postDiv.appendChild(img);
-        }
-
-        document.getElementById('posts-list').appendChild(postDiv);
+        window.location.href = "bulwowo_update.html"; // Przekierowanie do strony Bulwowo Update
     }
 </script>
 
