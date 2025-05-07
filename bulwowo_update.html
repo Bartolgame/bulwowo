@@ -6,100 +6,124 @@
     <title>Bulwowo Update</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             background-color: #121212;
             color: #e0e0e0;
-            margin: 0;
+            font-family: Arial, sans-serif;
             padding: 20px;
+            margin: 0;
         }
+
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
-        .post-container {
+
+        .header-logo {
+            height: 100px;
+        }
+
+        form, .post-container {
             background-color: #1e1e1e;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        .add-post {
-            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             margin-bottom: 20px;
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
         }
-        textarea, input {
-            width: 100%;
-            margin: 5px 0;
-            padding: 8px;
+
+        input, textarea, button {
+            padding: 15px;
             border-radius: 5px;
+            border: 1px solid #444;
             background-color: #2e2e2e;
             color: #e0e0e0;
-            border: none;
+            font-size: 1.1em;
+            width: 100%;
+            margin-bottom: 15px;
         }
+
         button {
-            padding: 10px;
             background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #45a049;
         }
-        .back-button {
+
+        .post {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
             margin-top: 10px;
-            background-color: #ff5722;
+        }
+
+        .post p {
+            margin: 0;
+            color: #fff;
+        }
+
+        .post h3 {
+            margin: 0;
+            color: #4CAF50;
         }
     </style>
 </head>
 <body>
 
 <div class="header">
+    <img src="Bulwowo_Logo.png" alt="Logo" class="header-logo">
     <h1>Bulwowo Update</h1>
 </div>
 
-<div class="add-post" id="add-post">
-    <input type="text" id="post-title" placeholder="Tytuł posta" required>
-    <textarea id="post-content" placeholder="Treść posta" required></textarea>
-    <button onclick="savePost()">Dodaj post</button>
+<!-- Formularz do tworzenia postów -->
+<form id="post-form" onsubmit="createPost(event)" style="display: none;">
+    <textarea id="post-content" placeholder="Napisz tutaj swój post..." rows="5" required></textarea>
+    <button type="submit">Dodaj post</button>
+</form>
+
+<!-- Miejsce na wyświetlanie postów -->
+<div class="post-container" id="posts-container">
+    <!-- Posty będą się pojawiały tutaj -->
 </div>
 
-<div id="posts"></div>
-
-<button class="back-button" onclick="goBack()">Cofnij</button>
-
 <script>
-    const username = localStorage.getItem('username');
+    const posts = [];
 
-    function goBack() {
-        window.location.href = 'index.html';
+    // Sprawdzanie, czy użytkownik jest "bartolgame"
+    const currentUser = localStorage.getItem('loggedUser');
+
+    if (currentUser === 'bartolgame') {
+        document.getElementById('post-form').style.display = 'block';
     }
 
-    function loadPosts() {
-        fetch('bulwowo_update_data.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('posts').innerHTML = data;
-            });
-    }
+    function createPost(event) {
+        event.preventDefault();
 
-    function savePost() {
-        const title = document.getElementById('post-title').value;
-        const content = document.getElementById('post-content').value;
-        const newPost = `<div class='post-container'><h3>${title}</h3><p>${content}</p></div>`;
-        fetch('bulwowo_update_data.html', {
-            method: 'POST',
-            headers: {'Content-Type': 'text/html'},
-            body: newPost
-        }).then(() => loadPosts());
-    }
+        const postContent = document.getElementById('post-content').value;
 
-    document.addEventListener('DOMContentLoaded', () => {
-        if (username === 'bartolgame') {
-            document.getElementById('add-post').style.display = 'block';
+        if (postContent.trim() !== "") {
+            posts.push(postContent);
+            displayPosts();
+            document.getElementById('post-content').value = "";
+        } else {
+            alert('Post nie może być pusty!');
         }
-        loadPosts();
-    });
+    }
+
+    function displayPosts() {
+        const postsContainer = document.getElementById('posts-container');
+        postsContainer.innerHTML = "";
+
+        posts.forEach((post, index) => {
+            const postElement = document.createElement('div');
+            postElement.classList.add('post');
+            postElement.innerHTML = `<h3>Post ${index + 1}</h3><p>${post}</p>`;
+            postsContainer.appendChild(postElement);
+        });
+    }
 </script>
 
 </body>
