@@ -58,6 +58,7 @@
             padding: 15px;
             border-radius: 5px;
             margin-top: 10px;
+            position: relative;
         }
 
         .post p {
@@ -69,6 +70,18 @@
             margin: 0;
             color: #4CAF50;
         }
+
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff4c4c;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -78,26 +91,32 @@
     <h1>Bulwowo Update</h1>
 </div>
 
-<!-- Formularz do tworzenia postów -->
 <form id="post-form" onsubmit="createPost(event)" style="display: none;">
     <textarea id="post-content" placeholder="Napisz tutaj swój post..." rows="5" required></textarea>
     <button type="submit">Dodaj post</button>
 </form>
 
-<!-- Miejsce na wyświetlanie postów -->
 <div class="post-container" id="posts-container">
-    <!-- Posty będą się pojawiały tutaj -->
 </div>
 
 <script>
-    const posts = [];
-
-    // Sprawdzanie, czy użytkownik jest "bartolgame"
     const currentUser = localStorage.getItem('loggedUser');
 
     if (currentUser === 'bartolgame') {
         document.getElementById('post-form').style.display = 'block';
     }
+
+    function savePosts(posts) {
+        localStorage.setItem('bulwowo_posts', JSON.stringify(posts));
+    }
+
+    function loadPosts() {
+        const storedPosts = localStorage.getItem('bulwowo_posts');
+        return storedPosts ? JSON.parse(storedPosts) : [];
+    }
+
+    const posts = loadPosts();
+    displayPosts();
 
     function createPost(event) {
         event.preventDefault();
@@ -105,7 +124,8 @@
         const postContent = document.getElementById('post-content').value;
 
         if (postContent.trim() !== "") {
-            posts.push(postContent);
+            posts.push({ content: postContent, author: currentUser });
+            savePosts(posts);
             displayPosts();
             document.getElementById('post-content').value = "";
         } else {
@@ -120,7 +140,21 @@
         posts.forEach((post, index) => {
             const postElement = document.createElement('div');
             postElement.classList.add('post');
-            postElement.innerHTML = `<h3>Post ${index + 1}</h3><p>${post}</p>`;
+            postElement.innerHTML = `<h3>Post ${index + 1}</h3><p>${post.content}</p>`;
+
+            if (currentUser === 'bartolgame') {
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Usuń';
+                deleteButton.classList.add('delete-button');
+                deleteButton.onclick = () => {
+                    if (confirm('Czy na pewno chcesz usunąć ten post?')) {
+                        posts.splice(index, 1);
+                        savePosts(posts);
+                        displayPosts();
+                    }
+                };
+                postElement.appendChild(deleteButton);
+            }
             postsContainer.appendChild(postElement);
         });
     }
