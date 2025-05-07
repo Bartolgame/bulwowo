@@ -31,6 +31,7 @@
             margin-bottom: 20px;
         }
 
+        /* Logo Bulwowo */
         .header-logo {
             position: absolute;
             top: 20px;
@@ -71,7 +72,7 @@
             display: none;
         }
 
-        form {
+        form, .panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -101,6 +102,28 @@
             background-color: #45a049;
         }
 
+        .bulwowo-update-button {
+            background-color: #ff5722;
+            color: #fff;
+            font-size: 2em; /* Zwiększony rozmiar */
+            padding: 20px 40px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .bulwowo-update-button:hover {
+            background-color: #e64a19;
+            transform: scale(1.05); /* Efekt powiększenia */
+        }
+
+        .bulwowo-update-button:active {
+            background-color: #bf360c;
+        }
+
         @keyframes slideIn {
             from {transform: translateY(20px); opacity: 0;}
             to {transform: translateY(0); opacity: 1;}
@@ -125,8 +148,8 @@
     <button id="login-btn" type="submit">Zaloguj się</button>
 </form>
 
-<div class="panel" id="user-panel" style="display: none;">
-    <h2 id="welcome-text"></h2>
+<div class="panel" id="user-panel">
+    <h2>Witaj, <span id="user-name"></span>!</h2>
     <button class="bulwowo-update-button" id="bulwowo-update-btn" onclick="window.location.href='bulwowo_update.html'">Bulwowo Update</button>
 </div>
 
@@ -146,16 +169,19 @@
         "salvat": "salvat555"
     };
 
+    document.getElementById('bulwowo-update-btn').style.display = 'none';
+
     function login(event) {
         event.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
         if (users[username] === password) {
-            document.getElementById('welcome-text').textContent = `Witaj, ${username}!`;
+            document.getElementById('user-name').textContent = username;
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('user-panel').style.display = 'flex';
             document.querySelector('.logout-button').style.display = 'block';
+            document.getElementById('bulwowo-update-btn').style.display = 'block';
         } else {
             alert('Niepoprawne dane logowania');
         }
@@ -165,6 +191,7 @@
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
         document.querySelector('.logout-button').style.display = 'none';
+        document.getElementById('bulwowo-update-btn').style.display = 'none';
     }
 </script>
 
