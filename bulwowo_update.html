@@ -82,9 +82,23 @@
             padding: 5px 10px;
             border-radius: 5px;
         }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
+
+<button class="back-button" onclick="window.location.href='index.html'">← Cofnij</button>
 
 <div class="header">
     <img src="Bulwowo_Logo.png" alt="Logo" class="header-logo">
@@ -92,6 +106,7 @@
 </div>
 
 <form id="post-form" onsubmit="createPost(event)" style="display: none;">
+    <input id="post-title" placeholder="Tytuł posta" required>
     <textarea id="post-content" placeholder="Napisz tutaj swój post..." rows="5" required></textarea>
     <button type="submit">Dodaj post</button>
 </form>
@@ -100,7 +115,6 @@
 </div>
 
 <script>
-    // Pobieranie zalogowanego użytkownika
     const currentUser = localStorage.getItem('loggedUser');
 
     if (currentUser === 'bartolgame') {
@@ -122,15 +136,17 @@
     function createPost(event) {
         event.preventDefault();
 
+        const postTitle = document.getElementById('post-title').value;
         const postContent = document.getElementById('post-content').value;
 
-        if (postContent.trim() !== "") {
-            posts.push({ content: postContent, author: currentUser });
+        if (postTitle.trim() !== "" && postContent.trim() !== "") {
+            posts.push({ title: postTitle, content: postContent, author: currentUser });
             savePosts(posts);
             displayPosts();
+            document.getElementById('post-title').value = "";
             document.getElementById('post-content').value = "";
         } else {
-            alert('Post nie może być pusty!');
+            alert('Post i tytuł nie mogą być puste!');
         }
     }
 
@@ -141,7 +157,7 @@
         posts.forEach((post, index) => {
             const postElement = document.createElement('div');
             postElement.classList.add('post');
-            postElement.innerHTML = `<h3>${post.author}: Post ${index + 1}</h3><p>${post.content}</p>`;
+            postElement.innerHTML = `<h3>${post.author}: ${post.title}</h3><p>${post.content}</p>`;
 
             if (currentUser === 'bartolgame') {
                 const deleteButton = document.createElement('button');
