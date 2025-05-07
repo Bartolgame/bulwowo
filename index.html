@@ -16,22 +16,32 @@
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             transition: background-color 0.3s ease;
+            background-image: url('Minecraft_panorama.png'); /* Tło wczytane z GitHub */
+            background-size: cover;  /* Dopasowanie rozmiaru tła */
+            background-position: center center; /* Wyśrodkowanie obrazu tła */
+            background-repeat: no-repeat; /* Brak powtarzania tła */
         }
+
         .header {
             text-align: center;
             margin-bottom: 20px;
             animation: fadeIn 1s ease;
+            z-index: 2;
+            position: relative;
         }
+
         .header img {
             width: 180px;
             height: auto;
             margin-bottom: 10px;
         }
+
         .header h1 {
             margin: 0;
             font-size: 3em;
             color: #4CAF50;
         }
+
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -46,21 +56,26 @@
             width: 50px;
             height: 50px;
         }
+
         .theme-toggle.light {
             background-color: #ffffff;
             color: #121212;
         }
+
         form, .panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background-color: #1e1e1e;
+            background-color: rgba(0, 0, 0, 0.7); /* Lekka przezroczystość dla formularza */
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             animation: slideIn 0.5s ease;
             font-size: 1.2em;
+            z-index: 2;
+            position: relative;
         }
+
         input, button {
             padding: 15px;
             border-radius: 5px;
@@ -69,21 +84,26 @@
             color: #e0e0e0;
             font-size: 1.1em;
         }
+
         button {
             background-color: #4CAF50;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #45a049;
         }
+
         .panel {
             display: none;
             text-align: center;
         }
+
         @keyframes fadeIn {
             from {opacity: 0;}
             to {opacity: 1;}
         }
+
         @keyframes slideIn {
             from {transform: translateY(20px); opacity: 0;}
             to {transform: translateY(0); opacity: 1;}
@@ -95,7 +115,7 @@
 <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
 <div class="header">
-    <img src="path_to_your_image.png" alt="Logo">
+    <img src="./path_to_your_image.png" alt="Logo">
     <h1>Bulwowo</h1>
 </div>
 
@@ -110,7 +130,6 @@
 <div class="panel" id="user-panel">
     <h2>Witaj, <span id="user-name"></span>!</h2>
     <p>To jest Twój panel użytkownika.</p>
-    <a href="bulwowo_update.html" id="update-link">Przejdź do Bulwowo Update</a>
     <button onclick="logout()">Wyloguj się</button>
 </div>
 
@@ -152,7 +171,6 @@
         const password = document.getElementById('password').value;
 
         if (users[username] === password) {
-            localStorage.setItem('loggedInUser', username);
             document.getElementById('user-name').textContent = username;
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('user-panel').style.display = 'flex';
@@ -162,18 +180,8 @@
     }
 
     function logout() {
-        localStorage.removeItem('loggedInUser');
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
-    }
-
-    window.onload = function() {
-        const loggedInUser = localStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            document.getElementById('user-name').textContent = loggedInUser;
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('user-panel').style.display = 'flex';
-        }
     }
 </script>
 
