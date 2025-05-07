@@ -4,8 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulwowo - Ogłoszenia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Dodajemy styl zgodny z poprzednią wersją */
+        /* Podstawowy motyw przypominający OLX */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .header {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .category-filter button {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .category-filter button:hover {
+            background-color: #ffcc00;
+        }
+
+        .add-ad-button {
+            background-color: #ffcc00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .ad-form {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .ad-form select, .ad-form input, .ad-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .ad-form button {
+            background-color: #ffcc00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .ad-item {
+            background-color: white;
+            padding: 20px;
+            margin: 10px auto;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .ad-item h3 {
+            color: #333;
+        }
+
+        .ad-item p {
+            color: #555;
+        }
+
+        .ad-item img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        .ad-buttons button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .ad-buttons button:hover {
+            background-color: #e6b800;
+        }
+
+        .ad-item .category-label {
+            background-color: #ffcc00;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            display: inline-block;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -88,6 +207,7 @@
                 <p>${ad.description}</p>
                 ${ad.image ? `<img src="${ad.image}" alt="Zdjęcie ogłoszenia">` : ''}
                 <div class="ad-buttons">
+                    <span class="category-label">${ad.category}</span>
                     ${ad.user === currentUser ? `<button onclick="editAd(${ad.id})">Edytuj</button><button onclick="deleteAd(${ad.id})">Usuń</button>` : ''}
                 </div>
             `;
