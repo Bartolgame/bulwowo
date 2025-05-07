@@ -16,19 +16,20 @@
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             transition: background-color 0.3s ease;
+            overflow-x: hidden;
         }
 
-        /* Tylko górna część strony z tłem */
+        /* Tło obrazu - przy samej górze */
         .header {
+            position: relative;
             text-align: center;
-            margin-bottom: 20px;
-            animation: fadeIn 1s ease;
             width: 100%;
             background-image: url('Minecraft_panorama.png');
             background-size: cover;
-            background-position: center center;
+            background-position: center top;
             background-repeat: no-repeat;
             height: 250px;
+            margin-bottom: 20px;
         }
 
         .header img {
@@ -43,20 +44,24 @@
             color: #4CAF50;
         }
 
-        /* Przycisk zmiany motywu */
-        .theme-toggle {
+        /* Przyciski u góry */
+        .top-buttons {
             position: absolute;
-            top: 20px;
+            top: 10px;
             right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .theme-toggle, .logout-button {
             cursor: pointer;
             background-color: #4CAF50;
             border: none;
-            padding: 10px;
-            border-radius: 50%;
+            padding: 10px 15px;
+            border-radius: 5px;
             color: white;
-            font-size: 1.5em;
-            width: 50px;
-            height: 50px;
+            font-size: 1.2em;
         }
 
         .theme-toggle.light {
@@ -64,12 +69,16 @@
             color: #121212;
         }
 
+        .theme-toggle:hover, .logout-button:hover {
+            background-color: #45a049;
+        }
+
         /* Formularz logowania */
-        form {
+        form, .panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: #1e1e1e;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -95,35 +104,48 @@
             background-color: #45a049;
         }
 
-        /* Animacja */
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
+        .panel {
+            display: none;
+            text-align: center;
+        }
+
+        .bulwowo-update-button {
+            background-color: #ff5722;
+            color: #fff;
+            font-size: 1.5em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .bulwowo-update-button:hover {
+            background-color: #e64a19;
         }
 
         @keyframes slideIn {
             from {transform: translateY(20px); opacity: 0;}
             to {transform: translateY(0); opacity: 1;}
         }
-
-        /* Ukrywanie panelu i elementów po logowaniu */
-        .panel {
-            display: none;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-
+<!-- Główne tło i nagłówek -->
 <div class="header">
     <img src="./path_to_your_image.png" alt="Logo">
     <h1>Bulwowo</h1>
 </div>
 
-<div id="alert-container"></div>
+<!-- Przyciski na górze -->
+<div class="top-buttons">
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <button class="logout-button" onclick="logout()">Wyloguj się</button>
+</div>
 
+<!-- Formularz logowania -->
 <form id="login-form" onsubmit="login(event)">
     <input id="username" type="text" placeholder="Nazwa użytkownika" required />
     <input id="password" type="password" placeholder="Hasło" required />
@@ -133,8 +155,7 @@
 <!-- Panel użytkownika -->
 <div class="panel" id="user-panel">
     <h2>Witaj, <span id="user-name"></span>!</h2>
-    <p>To jest Twój panel użytkownika.</p>
-    <button onclick="goToBulwowoUpdate()">Przejdź do Bulwowo Update</button>
+    <button class="bulwowo-update-button" onclick="window.location.href='bulwowo_update.html'">Bulwowo Update</button>
     <button onclick="logout()">Wyloguj się</button>
 </div>
 
@@ -187,10 +208,6 @@
     function logout() {
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
-    }
-
-    function goToBulwowoUpdate() {
-        window.location.href = "bulwowo_update.html"; // Przekierowanie do strony Bulwowo Update
     }
 </script>
 
