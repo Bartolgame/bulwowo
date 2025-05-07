@@ -19,7 +19,6 @@
             overflow-x: hidden;
         }
 
-        /* Tło obrazu - przy samej górze */
         .header {
             position: relative;
             text-align: center;
@@ -44,7 +43,6 @@
             color: #4CAF50;
         }
 
-        /* Przyciski u góry */
         .top-buttons {
             position: absolute;
             top: 10px;
@@ -73,90 +71,32 @@
             background-color: #45a049;
         }
 
-        /* Formularz logowania */
-        form, .panel {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background-color: #1e1e1e;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.5s ease;
-            font-size: 1.2em;
-        }
-
-        input, button {
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            font-size: 1.1em;
-        }
-
-        button {
-            background-color: #4CAF50;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .panel {
+        .logout-button {
             display: none;
-            text-align: center;
-        }
-
-        .bulwowo-update-button {
-            background-color: #ff5722;
-            color: #fff;
-            font-size: 1.5em;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .bulwowo-update-button:hover {
-            background-color: #e64a19;
-        }
-
-        @keyframes slideIn {
-            from {transform: translateY(20px); opacity: 0;}
-            to {transform: translateY(0); opacity: 1;}
         }
     </style>
 </head>
 <body>
 
-<!-- Główne tło i nagłówek -->
 <div class="header">
     <img src="./path_to_your_image.png" alt="Logo">
     <h1>Bulwowo</h1>
 </div>
 
-<!-- Przyciski na górze -->
 <div class="top-buttons">
     <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     <button class="logout-button" onclick="logout()">Wyloguj się</button>
 </div>
 
-<!-- Formularz logowania -->
 <form id="login-form" onsubmit="login(event)">
     <input id="username" type="text" placeholder="Nazwa użytkownika" required />
     <input id="password" type="password" placeholder="Hasło" required />
     <button id="login-btn" type="submit">Zaloguj się</button>
 </form>
 
-<!-- Panel użytkownika -->
 <div class="panel" id="user-panel">
     <h2>Witaj, <span id="user-name"></span>!</h2>
     <button class="bulwowo-update-button" onclick="window.location.href='bulwowo_update.html'">Bulwowo Update</button>
-    <button onclick="logout()">Wyloguj się</button>
 </div>
 
 <script>
@@ -200,6 +140,7 @@
             document.getElementById('user-name').textContent = username;
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('user-panel').style.display = 'flex';
+            document.querySelector('.logout-button').style.display = 'block';
         } else {
             alert('Niepoprawne dane logowania');
         }
@@ -208,6 +149,7 @@
     function logout() {
         document.getElementById('login-form').style.display = 'flex';
         document.getElementById('user-panel').style.display = 'none';
+        document.querySelector('.logout-button').style.display = 'none';
     }
 </script>
 
