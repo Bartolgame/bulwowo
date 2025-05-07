@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulwowo - Bulwowo Update</title>
+    <title>Bulwowo Update</title>
     <style>
         body {
             display: flex;
@@ -18,22 +18,42 @@
             transition: background-color 0.3s ease;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            animation: fadeIn 1s ease;
+        /* Styl panelu tworzenia posta */
+        #create-post-section {
+            display: none;
         }
 
-        .header img {
-            width: 180px;
-            height: auto;
+        .post {
+            background-color: rgba(0, 0, 0, 0.7);
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .post img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        /* Formularz tworzenia postu */
+        input, textarea, button {
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #2e2e2e;
+            color: #e0e0e0;
+            font-size: 1.1em;
             margin-bottom: 10px;
         }
 
-        .header h1 {
-            margin: 0;
-            font-size: 3em;
-            color: #4CAF50;
+        button {
+            background-color: #4CAF50;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
         }
 
         .theme-toggle {
@@ -50,212 +70,12 @@
             width: 50px;
             height: 50px;
         }
-
-        .theme-toggle.light {
-            background-color: #ffffff;
-            color: #121212;
-        }
-
-        .panel, .update-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background-color: #1e1e1e;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.5s ease;
-            font-size: 1.2em;
-            width: 80%;
-            max-width: 600px;
-        }
-
-        input, button, textarea {
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            font-size: 1.1em;
-            width: 100%;
-        }
-
-        button {
-            background-color: #4CAF50;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        .update-panel {
-            display: none;
-        }
-
-        .post {
-            background-color: #2e2e2e;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .post h3 {
-            margin-top: 0;
-        }
-
-        .post .content {
-            margin-top: 10px;
-        }
-
-        .post .image-preview {
-            margin-top: 10px;
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-
-        @keyframes slideIn {
-            from {transform: translateY(20px); opacity: 0;}
-            to {transform: translateY(0); opacity: 1;}
-        }
     </style>
 </head>
 <body>
 
 <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-<div class="header">
-    <img src="./path_to_your_image.png" alt="Logo">
+<div>
     <h1>Bulwowo Update</h1>
-</div>
-
-<div class="panel" id="user-panel">
-    <h2>Witaj, <span id="user-name"></span>!</h2>
-    <p>To jest Twój panel użytkownika.</p>
-    <button onclick="logout()">Wyloguj się</button>
-</div>
-
-<div class="update-panel" id="update-panel">
-    <h2>Dodaj nowy post</h2>
-    <input id="post-title" type="text" placeholder="Tytuł posta" required />
-    <textarea id="post-content" placeholder="Treść posta" required></textarea>
-    <input type="file" id="file-upload" />
-    <button onclick="addPost()">Dodaj post</button>
-    <button onclick="goBack()">Cofnij do panelu</button>
-
-    <div id="posts-container"></div>
-</div>
-
-<script>
-    const users = {
-        "bartolgame": "p@ss1234",
-        "matizke": "m@tiz2023",
-        "adrian": "adrian789",
-        "thecejoto": "cejoto_456",
-        "dzwonko": "dzwonko999",
-        "grigor": "grigor_321",
-        "koteks": "koteks777",
-        "pigeon": "pigeon111",
-        "yatkinss": "yatkinss000",
-        "wojtec": "wojtec333",
-        "arbuzek": "arbuzek888",
-        "salvat": "salvat555"
-    };
-
-    let loggedInUser = null;
-
-    function toggleTheme() {
-        const btn = document.querySelector('.theme-toggle');
-        document.body.classList.toggle('light-theme');
-        if (document.body.classList.contains('light-theme')) {
-            document.body.style.backgroundColor = '#f7f7f7';
-            document.body.style.color = '#333';
-            btn.classList.add('light');
-            btn.textContent = '☀️';
-        } else {
-            document.body.style.backgroundColor = '#121212';
-            document.body.style.color = '#e0e0e0';
-            btn.classList.remove('light');
-            btn.textContent = '🌙';
-        }
-    }
-
-    function login(event) {
-        event.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
-        if (users[username] === password) {
-            loggedInUser = username;
-            document.getElementById('user-name').textContent = username;
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('user-panel').style.display = 'flex';
-
-            if (username === "bartolgame") {
-                document.getElementById('update-panel').style.display = 'block';
-            }
-        } else {
-            alert('Niepoprawne dane logowania');
-        }
-    }
-
-    function logout() {
-        document.getElementById('login-form').style.display = 'flex';
-        document.getElementById('user-panel').style.display = 'none';
-        document.getElementById('update-panel').style.display = 'none';
-        loggedInUser = null;
-    }
-
-    function goBack() {
-        document.getElementById('update-panel').style.display = 'none';
-        document.getElementById('user-panel').style.display = 'flex';
-    }
-
-    function addPost() {
-        if (loggedInUser !== "bartolgame") {
-            alert("Tylko użytkownik 'bartolgame' może dodawać posty.");
-            return;
-        }
-
-        const title = document.getElementById('post-title').value;
-        const content = document.getElementById('post-content').value;
-        const posts = JSON.parse(localStorage.getItem('posts')) || [];
-        posts.push({ title, content });
-        localStorage.setItem('posts', JSON.stringify(posts));
-        loadPosts();
-    }
-
-    function loadPosts() {
-        const posts = JSON.parse(localStorage.getItem('posts')) || [];
-        const postsContainer = document.getElementById('posts-container');
-        postsContainer.innerHTML = ''; // Clear current posts
-        posts.forEach(post => {
-            const postElement = document.createElement('div');
-            postElement.classList.add('post');
-            postElement.innerHTML = `
-                <h3>${post.title}</h3>
-                <div class="content">${post.content}</div>
-            `;
-            postsContainer.appendChild(postElement);
-        });
-    }
-
-    window.onload = function () {
-        loadPosts();
-    };
-</script>
-
-</body>
-</html>
+    <p>Przeglądaj i dodaw
